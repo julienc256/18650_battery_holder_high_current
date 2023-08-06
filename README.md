@@ -1,5 +1,5 @@
 # 18650_battery_holder_high_current
-Un support de batteries 18650 paramétrable, de ma conception, qui peut gérer des courants relativement élevés.
+Un support de batteries 18650 paramétrable, de ma conception, adapté à des courants relativement élevés.
 
 Le design est également disponible sur Thingiverse : https://www.thingiverse.com/thing:6147387
 
