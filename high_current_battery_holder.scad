@@ -1,120 +1,153 @@
-//////////////////////////////////////////////////////////////////////
-//               HIGH CURRENT 18650 BATTERY HOLDER                  //
-//                          Version 1.1                             //
-//                      BY JULIEN COPPOLANI                         //
-//////////////////////////////////////////////////////////////////////
-
-// This version has been edited to work with thingiverse customizer
-
-// Designed to work with these metal contacts :
-// https://fr.aliexpress.com/item/32946601230.html
-
-/* [General Settings] */
-
-// NUMBER OF 18650 CELLS
-NbCells = 4; // [1:30]
-
-// DISPLAYS THE POSITIVE AND NEGATIVE SIGNS ON THE HOLDER
-DisplaySigns = 1; // [0, 1]
-
-/* [Additional Settings] */
-
-// ADD A PROTECTION ON THE BOTTOM LEFT
-ProtectionBottomLeft = 0; // [0, 1]
-// ADD A PROTECTION ON THE BOTTOM RIGHT
-ProtectionBottomRight = 0; // [0, 1]
-// ADD A PROTECTION ON THE TOP LEFT
-ProtectionTopLeft = 0; // [0, 1]
-// ADD A PROTECTION ON THE TOP RIGHT
-ProtectionTopRight = 0; // [0, 1]
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//                             HIGH CURRENT 18650 BATTERY HOLDER                                 //
+//                                     BY JULIEN COPPOLANI                                       //
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// OTHER PARAMETERS - DO NOT MODIFY
-/* [Hidden] */
-$fn=32;
-Largeur=81;
-Hauteur=19.4;
-LongueurCell=Largeur-8;
-LargeurCell=19;
-Longueur=(LargeurCell+2)*NbCells+2;
+NB_CELLS=14;     // NUMBER OF CELLS
+DISPLAY_SIGNS=1; // DISPLAYS THE POSITIVE AND NEGATIVE SIGNS ON THE HOLDER
+IS_CONNECTOR=0;  // BONUS : ADD SUPPORT FOR 4MM CONNECTORS
+IS_PROTECTION=1; // BONUS : ADD PROTECTIONS
+
+// PARAMETERS - DO NOT MODIFY
+$fn=24;
+LARGEUR=81;
+HAUTEUR=19.4;
+LONGUEUR_CELL=LARGEUR-8;
+LARGEUR_CELL=19;
+LONGUEUR=(LARGEUR_CELL+2)*NB_CELLS+2;
+
 
 // MAIN
 difference()
 {
-    cube([Largeur, Longueur, Hauteur]);
+    cube([LARGEUR, LONGUEUR, HAUTEUR]);
 
-    for(i=[0:1:NbCells-1])
+    for(i=[0:1:NB_CELLS-1])
     {
-        decalage_y = 2+i*(LargeurCell+2);
-        // 18650 battery location
+        decalage_y = 2+i*(LARGEUR_CELL+2);
+        // Emplacement accu 18650
         translate([4, decalage_y, 2])
-            cube([LongueurCell, LargeurCell, Hauteur]);
-        // Left side metal contact location
-        translate([2, decalage_y+LargeurCell/2-2.6, 3.6])
-            cube([3, 5.2, Hauteur]);
-        // Right side metal contact location
-        translate([Largeur-5, decalage_y+LargeurCell/2-2.6, 3.6])
-            cube([3, 5.2, Hauteur]);
-        // Metal contact insertion hole
-        translate([-1, decalage_y+LargeurCell/2-2.5, 3.6])
-            cube([Largeur+2, 5, 0.6]);
-        // Hole on the bottom for ease the removal of the battery
+            cube([LONGUEUR_CELL, LARGEUR_CELL, HAUTEUR]);
+        // Emplacement contact métallique côté Gauche
+        translate([2, decalage_y+LARGEUR_CELL/2-2.6, 3.6])
+            cube([3, 5.2, HAUTEUR]);
+        // Emplacement contact métallique côté Droit
+        translate([LARGEUR-5, decalage_y+LARGEUR_CELL/2-2.6, 3.6])
+            cube([3, 5.2, HAUTEUR]);
+        // Passage contact métallique
+        translate([-1, decalage_y+LARGEUR_CELL/2-2.5, 3.6])
+            cube([LARGEUR+2, 5, 0.6]);
+        // Trous sur le dessous pour retirer les accus plus facilement et alléger la structure
         hull()
         {
-            translate([10, decalage_y+LargeurCell/2, -1])
+            translate([10, decalage_y+LARGEUR_CELL/2, -1])
                 cylinder(4, 5, 5);
-            translate([Largeur-10, decalage_y+LargeurCell/2, -1])
+            translate([LARGEUR-10, decalage_y+LARGEUR_CELL/2, -1])
                 cylinder(4, 5, 5);
         }
-		// Displays the positive and negative signs on the battery holder
-        if (DisplaySigns==1)
+        if (DISPLAY_SIGNS==1)
         {        
             if (i%2==0)
             {
-                // Minus sign on the left side
-                translate([-0.6,decalage_y+LargeurCell/2-4, 11.4])
+                // Signe Moins - côté Gauche
+                translate([-0.4,decalage_y+LARGEUR_CELL/2-4, 11.4])
                     cube([1, 8, 2]);
-                // Plus sign on the right side
-                translate([Largeur-0.4,decalage_y+LargeurCell/2-4, 11.4])
+                // Signe Plus + côté Droit
+				if (i != 0) {
+                translate([LARGEUR-0.6,decalage_y+LARGEUR_CELL/2-4, 11.4])
                     cube([1, 8, 2]);
-                translate([Largeur-0.4,decalage_y+LargeurCell/2-1, 8.4])
+                translate([LARGEUR-0.6,decalage_y+LARGEUR_CELL/2-1, 8.4])
                     cube([1, 2, 8]);
+				}
             }
             else
             {
-                // Minus sign on the right side
-                translate([Largeur-0.4,decalage_y+LargeurCell/2-4, 11.4])
+                // Signe Moins - côté Droit
+                translate([LARGEUR-0.6,decalage_y+LARGEUR_CELL/2-4, 11.4])
                     cube([1, 8, 2]);				
-                // Plus sign on the left side
-                translate([-0.6,decalage_y+LargeurCell/2-4, 11.4])
+                // Signe Plus + côté Gauche
+                translate([-0.4,decalage_y+LARGEUR_CELL/2-4, 11.4])
                     cube([1, 8, 2]);
-                translate([-0.6,decalage_y+LargeurCell/2-1, 8.4])
+                translate([-0.4,decalage_y+LARGEUR_CELL/2-1, 8.4])
                     cube([1, 2, 8]);
+
             }
         }
     }
-	// Holes on the edges to lighten the battery case
+	// Trous pour alléger la structure sans compromettre la rigidité
 	for(i=[0:1:5])
 	{
 		hull()
 		{
-			translate([12+(Largeur-24)*i/5,-1, 7])
+			translate([12+(LARGEUR-24)*i/5,-1, 7])
 				rotate([-90,0,0])
-					cylinder(Longueur+2, 3, 3);
-			translate([12+(Largeur-24)*i/5,-1,Hauteur-6])
+					cylinder(LONGUEUR+2, 3, 3);
+			translate([12+(LARGEUR-24)*i/5,-1,HAUTEUR-6])
 				rotate([-90,0,0])
-					cylinder(Longueur+2, 3, 3);			
+					cylinder(LONGUEUR+2, 3, 3);		
 		}
 	}
 }
 
-// Add some protections
-if (ProtectionBottomLeft==1)
-    translate([-7, 0, 0]) cube([7, 7, Hauteur]);
-if (ProtectionBottomRight==1)
-	translate([Largeur, 0, 0]) cube([7, 7, Hauteur]);
-if (ProtectionTopLeft==1)
-    translate([-7, Longueur-7, 0]) cube([7, 7, Hauteur]);
-if (ProtectionTopRight==1)
-    translate([Largeur, Longueur-7, 0]) cube([7, 7, Hauteur]);
-// THE END
+
+// BONUS
+HAUTEUR_CONNECTEUR=14;
+
+// Petit boitier qui accueille les 2 connecteurs femelle 4mm
+if (IS_CONNECTOR==1)
+{
+    difference()
+    {
+        translate([LARGEUR, 0, HAUTEUR-HAUTEUR_CONNECTEUR])
+            cube([7, 22, HAUTEUR_CONNECTEUR]);
+        translate([LARGEUR+3.5, -1, 9.5])
+            rotate([-90, 0, 0])
+                cylinder(24, 2.5, 2.5);
+        translate([LARGEUR+3.5, -1, 16.5])
+            rotate([-90, 0, 0])
+                cylinder(24, 2.5, 2.5);
+    }
+}
+
+// Carrés sur les côtés pour protéger les contacts et soudures
+if (IS_PROTECTION==1)
+{
+	difference()
+	{		
+		union()
+		{
+			for(i=[2:1:NB_CELLS-2])
+			{
+				dec_y = i*(LARGEUR_CELL+2)-2;
+				if (i%2==0)
+				{
+					translate([-7, dec_y, 0])
+						cube([7, 7, HAUTEUR]);
+				}
+				else
+				{
+					translate([LARGEUR, dec_y, 0])
+						cube([7, 7, HAUTEUR]);
+				}
+			}
+		}
+		/*translate([-1.5, -1, HAUTEUR/2.4])
+			rotate([-90, 0, 0])
+				cylinder(LONGUEUR+2, d=3);*/
+		// Trous pour faire passer le fil « moins »
+		translate([LARGEUR+1.9, -1, 7.2])
+			rotate([-90, 0, 0])
+				cylinder(LONGUEUR+2, d=3.8, $fn=16);	
+	}
+	translate([-7, 0, 0])
+		cube([7, 7, HAUTEUR]);
+	translate([-7, LONGUEUR-7, 0])
+		cube([7, 7, HAUTEUR]);
+	translate([LARGEUR, LONGUEUR-7, 0])
+		cube([7, 7, HAUTEUR]);
+	/*if (IS_CONNECTOR==0) {
+		translate([LARGEUR, 0, 0])
+			cube([7, 7, HAUTEUR]);
+	}*/
+}
